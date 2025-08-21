@@ -1,0 +1,108 @@
+<!-- لوحة الإعدادات -->
+    <div class="settings-panel" id="settingsPanel">
+        <button class="close-settings" onclick="toggleSettings()">
+            <i class="fas fa-times"></i>
+        </button>
+        
+        <div class="settings-content">
+            <h2>إعدادات التطبيق</h2>
+            
+            <div class="settings-group">
+                <h3>الإشعارات</h3>
+                
+                <div class="setting-item">
+                    <span>تفعيل الإشعارات</span>
+                    <label class="switch">
+                        <input type="checkbox" id="notificationsEnabled" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="notification-item">
+                    <span>تذكير الصباح</span>
+                    <select class="time-select" id="morningTime">
+                        <option value="06:00">6:00 صباحاً</option>
+                        <option value="07:00">7:00 صباحاً</option>
+                        <option value="08:00">8:00 صباحاً</option>
+                    </select>
+                </div>
+
+                <div class="notification-item">
+                    <span>تذكير المساء</span>
+                    <select class="time-select" id="eveningTime">
+                        <option value="18:00">6:00 مساءً</option>
+                        <option value="19:00">7:00 مساءً</option>
+                        <option value="20:00">8:00 مساءً</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="settings-group">
+                <h3>المظهر</h3>
+                
+                <div class="setting-item">
+                    <span>الوضع الليلي</span>
+                    <label class="switch">
+                        <input type="checkbox" id="darkMode">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="setting-item">
+                    <span>حجم الخط</span>
+                    <select id="fontSize">
+                        <option value="small">صغير</option>
+                        <option value="medium" selected>متوسط</option>
+                        <option value="large">كبير</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="settings-group">
+                <h3>حول التطبيق</h3>
+                <p>تطبيق الأذكار - صدقة جارية</p>
+                <p>الإصدار: 1.0.0</p>
+                <button class="reset-btn" onclick="resetAllData()">
+                    <i class="fas fa-trash"></i> مسح جميع البيانات
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // بيانات التطبيق
+        let appData = {
+            settings: {
+                notifications: true,
+                darkMode: false,
+                fontSize: 'medium',
+                morningTime: '06:00',
+                eveningTime: '18:00'
+            },
+            progress: {
+                morning: 0,
+                evening: 0,
+                prayer: 0
+            }
+        };
+
+        // تهيئة التطبيق
+        function initApp() {
+            loadData();
+            updateProgressBars();
+            setupNotifications();
+            updateTime();
+        }
+
+        // تحميل البيانات من localStorage
+        function loadData() {
+            const saved = localStorage.getItem('adhkarApp');
+            if (saved) {
+                appData = JSON.parse(saved);
+                
+                // تطبيق الإعدادات
+                document.getElementById('notificationsEnabled').checked = appData.settings.notifications;
+                document.getElementById('darkMode').checked = appData.settings.darkMode;
+                document.getElementById('fontSize').value = appData.settings.fontSize;
+                document.getElementById('morningTime').value = appData.settings.morningTime;
+                document.getElementById('eveningTime').value = appData.settings.eveningTime;
